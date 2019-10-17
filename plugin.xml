@@ -39,7 +39,7 @@
 
     <framework src="libz.tbd" />
     <framework src="libxml2.tbd" />
-    <framework src="GCDWebServer" type="podspec" spec="~> 3.5.2" />
+    <pod name="GCDWebServer" version="3.5.3" />
 
     <!-- GCDWebserver -->
     <header-file src="src/ios/GCDWebServer-Bridging-Header.h"/>
