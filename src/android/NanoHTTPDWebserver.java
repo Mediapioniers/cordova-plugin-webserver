@@ -194,7 +194,11 @@ public class NanoHTTPDWebserver extends NanoHTTPD {
      */
     public static String getMimeType(String url) {
         String type = null;
-        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+        String extension = null;
+        int i = url.lastIndexOf(".");
+        if (i > 0) {
+            extension = url.substring(i + 1);
+        }
         if (extension != null) {
             type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
         }
@@ -229,46 +233,30 @@ public class NanoHTTPDWebserver extends NanoHTTPD {
         Response response = null;
         Log.d(this.getClass().getName(), "responseObject: " + responseObject.toString());
 
-        if (responseObject.has("path")) {
-            try {
+        try {
+            if (responseObject.has("path")) {
                 File file = new File(responseObject.getString("path"));
                 Uri uri = Uri.fromFile(file);
                 String mime = getMimeType(uri.toString());
-                Response res = serveFile(session.getHeaders(), file, mime);
-                Iterator<?> keys = responseObject.getJSONObject("headers").keys();
-                while (keys.hasNext()) {
-                    String key = (String) keys.next();
-                    res.addHeader(
-                            key,
-                            responseObject.getJSONObject("headers").getString(key)
-                    );
-                }
-                return res;
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return response;
-        } else {
-            try {
+                response = serveFile(session.getHeaders(), file, mime);
+            } else {
                 response = newFixedLengthResponse(
-                        Response.Status.lookup(responseObject.getInt("status")),
-                        getContentType(responseObject),
-                        responseObject.getString("body")
+                    Response.Status.lookup(responseObject.getInt("status")),
+                    getContentType(responseObject),
+                    responseObject.getString("body")
                 );
-
-                Iterator<?> keys = responseObject.getJSONObject("headers").keys();
-                while (keys.hasNext()) {
-                    String key = (String) keys.next();
-                    response.addHeader(
-                            key,
-                            responseObject.getJSONObject("headers").getString(key)
-                    );
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
-            return response;
+            Iterator<?> keys = responseObject.getJSONObject("headers").keys();
+            while (keys.hasNext()) {
+                String key = (String) keys.next();
+                response.addHeader(
+                    key,
+                    responseObject.getJSONObject("headers").getString(key)
+                );
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+        return response;
     }
 }
