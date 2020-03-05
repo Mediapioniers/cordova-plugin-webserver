@@ -202,6 +202,9 @@ public class NanoHTTPDWebserver extends NanoHTTPD {
         if (extension != null) {
             type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
         }
+        if (type == null) {
+            type = fixAndroidsProblemOfMissingMimeTypes(extension);
+        }
         return type;
     }
 
@@ -258,5 +261,155 @@ public class NanoHTTPDWebserver extends NanoHTTPD {
             e.printStackTrace();
         }
         return response;
+    }
+
+    private static String fixAndroidsProblemOfMissingMimeTypes(String extension) {
+        switch (extension) {
+            case "aac":
+                return "audio/aac"; // AAC audio
+            case "abw":
+                return "application/x-abiword"; // AbiWord document
+            case "arc":
+                return "application/x-freearc"; // Archive document (multiple files embedded)
+            case "avi":
+                return "video/x-msvideo"; // AVI: Audio Video Interleave
+            case "azw":
+                return "application/vnd.amazon.ebook"; // Amazon Kindle eBook format
+            case "bin":
+                return "application/octet-stream"; // Any kind of binary data
+            case "bmp":
+                 return "image/bmp"; // Windows OS/2 Bitmap Graphics
+            case "bz":
+                return "application/x-bzip"; // BZip archive
+            case "bz2":
+                return "application/x-bzip2"; // BZip2 archive
+            case "csh":
+                return "application/x-csh"; // C-Shell script
+            case "css":
+                return "text/css"; // Cascading Style Sheets (CSS)
+            case "csv":
+                return "text/csv"; // Comma-separated values (CSV)
+            case "doc":
+                return "application/msword"; // Microsoft Word
+            case "docx":
+                return "application/vnd.openxmlformats-officedocument.wordprocessingml.document"; // Microsoft Word (OpenXML)
+            case "eot":
+                return "application/vnd.ms-fontobject"; // MS Embedded OpenType fonts
+            case "epub":
+                return "application/epub+zip"; // Electronic publication (EPUB)
+            case "gz":
+                return "application/gzip"; // GZip Compressed Archive
+            case "gif":
+                return "image/gif"; // Graphics Interchange Format (GIF)
+            case "htm":
+            case "html":
+                return "text/html"; // HyperText Markup Language (HTML)
+            case "ico":
+                return "image/vnd.microsoft.icon"; // Icon format
+            case "ics":
+                return "text/calendar"; // iCalendar format
+            case "jar":
+                return "application/java-archive"; // Java Archive (JAR)
+            case "jpeg":
+            case "jpg":
+                return "image/jpeg"; // JPEG images
+            case "js":
+                return "text/javascript"; // JavaScript
+            case "json":
+                return "application/json"; // JSON format
+            case "jsonld":
+                return "application/ld+json"; // JSON-LD format
+            case "mid":
+                return "audio/midi audio/x-midi"; // Musical Instrument Digital Interface (MIDI)
+            case "midi":
+                return "audio/midi audio/x-midi"; // Musical Instrument Digital Interface (MIDI)
+            case "mjs":
+                return "text/javascript"; // JavaScript module
+            case "mp3":
+                return "audio/mpeg"; // MP3 audio
+            case "mpeg":
+                return "video/mpeg"; // MPEG Video
+            case "mpkg":
+                return "application/vnd.apple.installer+xml"; // Apple Installer Package
+            case "odp":
+                return "application/vnd.oasis.opendocument.presentation"; // OpenDocument presentation document
+            case "ods":
+                return "application/vnd.oasis.opendocument.spreadsheet"; // OpenDocument spreadsheet document
+            case "odt":
+                return "application/vnd.oasis.opendocument.text"; // OpenDocument text document
+            case "oga":
+            case "ogv":
+                return "video/ogg"; // OGG video
+            case "ogx":
+                return "application/ogg"; // OGG
+            case "opus":
+                return "audio/opus"; // Opus audio
+            case "otf":
+                return "font/otf"; // OpenType font
+            case "png":
+                return "image/png"; // Portable Network Graphics
+            case "pdf":
+                return "application/pdf"; // Adobe Portable Document Format (PDF)
+            case "php":
+                return "application/php"; // Hypertext Preprocessor (Personal Home Page)
+            case "ppt":
+                return "application/vnd.ms-powerpoint"; // Microsoft PowerPoint
+            case "pptx":
+                return "application/vnd.openxmlformats-officedocument.presentationml.presentation"; // Microsoft PowerPoint (OpenXML)
+            case "rar":
+                return "application/vnd.rar"; // RAR archive
+            case "rtf":
+                return "application/rtf"; // Rich Text Format (RTF)
+            case "sh":
+                return "application/x-sh"; // Bourne shell script
+            case "svg":
+                return "image/svg+xml"; // Scalable Vector Graphics (SVG)
+            case "swf":
+                return "application/x-shockwave-flash"; // Small web format (SWF) or Adobe Flash document
+            case "tar":
+                return "application/x-tar"; // Tape Archive (TAR)
+            case "tif":
+            case "tiff":
+                return "image/tiff"; // Tagged Image File Format (TIFF)
+            case "ts":
+                return "video/mp2t"; // MPEG transport stream
+            case "ttf":
+                return "font/ttf"; // TrueType Font
+            case "txt":
+                return "text/plain"; // Text, (generally ASCII or ISO 8859-n)
+            case "vsd":
+                return "application/vnd.visio"; // Microsoft Visio
+            case "wav":
+                return "audio/wav"; // Waveform Audio Format
+            case "weba":
+                return "audio/webm"; // WEBM audio
+            case "webm":
+                return "video/webm"; // WEBM video
+            case "webp":
+                return "image/webp"; // WEBP image
+            case "woff":
+                return "font/woff"; // Web Open Font Format (WOFF)
+            case "woff2":
+                return "font/woff2"; // Web Open Font Format (WOFF)
+            case "xhtml":
+                return "application/xhtml+xml"; // XHTML
+            case "xls":
+                return "application/vnd.ms-excel"; // Microsoft Excel
+            case "xlsx":
+                return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"; // Microsoft Excel (OpenXML)
+            case "xml":
+                return "application/xml"; // XML
+            case "xul":
+                return "application/vnd.mozilla.xul+xml"; // XUL
+            case "zip":
+                return "application/zip"; // ZIP archive
+            case "3gp":
+                return "video/3gpp"; // 3GPP audio/video container
+            case "3g2":
+                return "video/3gpp2"; // 3GPP2 audio/video container
+            case "7z":
+                return "application/x-7z-compressed"; // 7-zip archive
+        }
+        return null;
     }
 }
